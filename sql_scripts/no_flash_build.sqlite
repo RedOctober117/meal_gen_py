@@ -1,0 +1,73 @@
+-- This script creates the meal_gen database. It should include all the relevant data. 
+
+CREATE TABLE IF NOT EXISTS units_of_measure (
+  unit_id     INTEGER PRIMARY KEY AUTOINCREMENT,
+  unit_name   VARCHAR(50) NOT NULL,
+  unit_abbrev VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS default_serving_units (
+  unit_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+  type      VARCHAR(50)       NOT NULL    UNIQUE,
+  unit_of_measure_id      INTEGER       NOT NULL,
+  FOREIGN KEY (unit_of_measure_id) REFERENCES units_of_measure (unit_id)
+);
+
+CREATE TABLE IF NOT EXISTS servings (
+  serv_id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  serv_name       VARCHAR(50)    NOT NULL     UNIQUE,
+  serv_size       DECIMAL(5,2)   NOT NULL,
+  serv_unit       VARCHAR(50)    NOT NULL,
+  serv_cal        INTEGER            DEFAULT 0, 
+  serv_fat_tot    INTEGER            DEFAULT 0,
+  serv_fat_sat    INTEGER            DEFAULT 0,
+  serv_fat_trans  INTEGER            DEFAULT 0,
+  serv_chol       INTEGER            DEFAULT 0,
+  serv_sod        INTEGER            DEFAULT 0,
+  serv_carb_tot   INTEGER            DEFAULT 0,
+  serv_fiber_diet INTEGER            DEFAULT 0,
+  serv_sugar_tot  INTEGER            DEFAULT 0,
+  serv_sugar_add  INTEGER            DEFAULT 0,
+  serv_prot       INTEGER            DEFAULT 0,
+  serv_vit_d      INTEGER            DEFAULT 0,
+  serv_calcium    INTEGER            DEFAULT 0,
+  serv_iron       INTEGER            DEFAULT 0,
+  serv_potas      INTEGER            DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS meal_names (
+  meal_id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  meal_name       VARCHAR(50)    NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS meal_compositions (
+  meal_id         INTEGER            NOT NULL,
+  serv_qty        DECIMAL(5,2)   NOT NULL,
+  serv_id         INTEGER            NOT NULL,
+  FOREIGN KEY (serv_id) REFERENCES servings(serv_id),
+  FOREIGN KEY (meal_id) REFERENCES meal_names(meal_id)
+);
+
+CREATE TABLE IF NOT EXISTS meal_breakfast (
+  meal_breakfast_id      INTEGER PRIMARY KEY      AUTOINCREMENT,
+  meal_compositions_id   INTEGER      NOT NULL      UNIQUE,
+  FOREIGN KEY (meal_compositions_id) REFERENCES meal_names(meal_id)
+);
+
+CREATE TABLE IF NOT EXISTS meal_lunch (
+  meal_lunch_id               INTEGER PRIMARY KEY          AUTOINCREMENT,
+  meal_composition_id         INTEGER           NOT NULL,
+  FOREIGN KEY (meal_composition_id) REFERENCES meal_names(meal_id)
+);
+
+CREATE TABLE IF NOT EXISTS meal_dinner (
+  meal_dinner_id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  meal_composition_id    INTEGER     NOT NULL,
+  FOREIGN KEY (meal_composition_id) REFERENCES meal_names(meal_id)
+);
+
+CREATE TABLE IF NOT EXISTS meal_week_history (
+  meal_week_id    INTEGER PRIMARY KEY  AUTOINCREMENT,
+  meal_name_id    INTEGER   NOT NULL,
+  FOREIGN KEY (meal_name_id) REFERENCES meal_names(meal_id)
+);
