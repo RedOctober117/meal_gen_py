@@ -8,20 +8,41 @@ def main():
     database = Connection(db_path)
     database.checked_establish_connection()
     print(database.path())
-    match match_query_user('Flash table? (y/N): ', ['y', 'n', None], False):
+    match match_query_user('Flash database? (y/N): ', ['y', 'n', None], False):
         case 'Y' | 'y':
             flash_db_build(flash_path, database)
         case _:
             pass
  
-    # print(tabularize_database(database))
-    print(tabularize_table('unit_abbreviation', database))
-    insert_unit_abbreviation(generate_unit_abbreviation(['abc', 'def']), database)
+    # print(tabularize_table('unit_abbreviation', database))
+
+    insert_into_table('unit_abbreviation', database, 'tsp')
+    insert_into_table('unit_name', database, ['Teaspoon', 'Cookie'], [6, None])
+    insert_into_table('serving_name', database, 'Golden Oreo')
+    insert_into_table('serving_size', database, 3, 7, 2)
+    insert_into_table('serving_size', database, 34, 2, 2)
+    insert_into_table('serving_nutrient', database, 1, 160, 2)
+    insert_into_table('serving_nutrient', database, 2, 7, 2)
+    insert_into_table('serving_nutrient', database, 3, 2, 2)
+    insert_into_table('serving_nutrient', database, 4, 0, 2)
+    insert_into_table('serving_nutrient', database, 5, 0, 3)
+    insert_into_table('serving_nutrient', database, 6, 120, 3)
+    insert_into_table('serving_nutrient', database, 7, 25, 2)
+    insert_into_table('serving_nutrient', database, 8, 0, 2)
+    insert_into_table('serving_nutrient', database, 9, 12, 2)
+    insert_into_table('serving_nutrient', database, 10, 12, 2)
+    insert_into_table('serving_nutrient', database, 11, 1, 2)
+    insert_into_table('serving_nutrient', database, 12, 0, 4)
+    insert_into_table('serving_nutrient', database, 13, 0, 3)
+    insert_into_table('serving_nutrient', database, 13, 0.8, 3)
+    insert_into_table('serving_nutrient', database, 13, 20, 3)
+
+    print(tabularize_database(database))
     
     database.connection.close()
 
 def tabularize_database(database):
-    tables = ['unit_abbreviation', 'unit_name', 'nutrient_name','nutrient_unit','serving_name','serving_size','serving_nutrient','meal_name','meal_composition','meal_breakfast','meal_lunch', 'meal_dinner', 'meal_week_history']
+    tables = ['unit_abbreviation', 'unit_name', 'nutrient_name','nutrient_unit','serving_name','serving_size','serving_nutrient','meal_name','meal_composition', 'time_classification', 'meal_time']
     prebuilt_buffer = [ format(f'{tabularize_result(dump_table(string, database))}\n') for string in tables ]
     buffer = ''
     
