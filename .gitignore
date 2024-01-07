@@ -1,6 +1,7 @@
 # Personal
 scripts/
 pyvenv.cfg
+*.bak
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
