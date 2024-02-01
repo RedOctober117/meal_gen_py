@@ -1,0 +1,10 @@
+{% import 'templates.html.jinja' as forms %}
+
+<!DOCTYPE html>
+<head>
+    <title>Test Input Here</title>
+    <link rel="stylesheet" href={{ url_for('static', filename='style.css') }}>
+</head>
+<body>
+    <p>{{ forms.insertion_query_form(table) }}</p>
+</body>

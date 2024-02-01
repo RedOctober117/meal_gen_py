@@ -1,5 +1,3 @@
-import re
-
 def query_user(message: str):
     while True:
         user_input = input(message)

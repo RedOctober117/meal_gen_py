@@ -1,0 +1,15 @@
+{% macro input(name, value='', type='text', size=20) -%}
+    <input type="{{ type }}" name="{{ name }}" value="{{
+        value|e }}" size="{{ size }}">
+{%- endmacro %}
+
+{% macro insertion_query_form(table) -%}
+    <form>
+        <ul>
+        {%- for field in table %}
+            <li><p>{{ input(field) }}</p></li>
+        {%- endfor %}
+        </ul>
+        {{ input('submit', value='Submit', type='submit') }}
+    </form>
+{%- endmacro %}

@@ -1,6 +1,7 @@
 import sqlite3, os
 from input_validation import *
 from model import *
+from pathlib import Path
 
 class ConnectionError(Exception):
     pass
