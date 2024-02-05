@@ -1,10 +1,11 @@
-from src.db_model.connection import *
+from connection import *
+from pathlib import Path
 # connection = sqlite3.connect("db\\test.db")
-flash_path = 'sql_scripts\\flash_build.sql'
-non_flash_path = 'sql_scripts\\no_flash_build.sqlite'
+flash_path = Path(Path.cwd(), 'src/sql_scripts/flash_build.sql')
+non_flash_path = Path(Path.cwd(), 'src/sql_scripts/no_flash_build.sqlite')
 
 def main():
-    db_path = 'meal_gen.db'
+    db_path = Path(Path.cwd(), 'meal_gen.db')
     database = Connection(db_path)
     database.checked_establish_connection()
     print(database.path())
@@ -53,7 +54,7 @@ def tabularize_database(database):
 
     return buffer
 
-def tabularize_result(rows):
+    def tabularize_result(rows):
     string = ''
     
     for dict in rows:
