@@ -1,5 +1,5 @@
 from collections import namedtuple
-from src.db_model.input_validation import *
+from meal_gen_py.db_model.input_validation import *
 import sqlite3
 
 ## Data flow model
