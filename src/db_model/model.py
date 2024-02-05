@@ -1,5 +1,5 @@
 from collections import namedtuple
-from input_validation import *
+from src.db_model.input_validation import *
 import sqlite3
 
 ## Data flow model
@@ -74,11 +74,12 @@ table_insertion_query_templates = {
                             'meal_time': 'INSERT INTO meal_time (meal_name, time_classification) VALUES (:meal_name, :time_classification)'
                             }
 
-
+def tuplefy_inputs(*inputs):
+    tuplify_inputs = lambda i: i if isinstance(i, list) else [i]
+    return list(map(tuplify_inputs, inputs))
 
 def insert_into_table(table, conn, *inputs):
-    tuplify_inputs = lambda i: i if isinstance(i, list) else [i]
-    inputs = list(map(tuplify_inputs, inputs))
+    inputs = tuplefy_inputs(*inputs)
     rows = generate_dictionary(table, zip(*inputs))
     execute_query(table_insertion_query_templates.get(table), rows, conn)
     return rows
@@ -121,88 +122,9 @@ def generate_dictionary(table, rows):
                                        'time_classification': time_classification,
                                        'meal_time': meal_time,
                                        }
+    
     rows = [ i._asdict() for i in [ j for j in dictionary_generation_templates[table](rows) ] ]
     return tuple(rows)
-
-# unit_abbreviation
-# def insert_unit_abbreviation(conn, *inputs):
-#     rows = generate_unit_abbreviation(zip(*inputs))
-#     execute_query('INSERT INTO unit_abbreviation (abbreviation) VALUES (:abbreviation)', rows, conn)
-#     return rows
-
-# def insert_unit_name(conn, *inputs):
-#     rows = generate_unit_name(zip(*inputs))
-#     execute_query('INSERT INTO unit_name (name, unit_abbreviation) VALUES (:name, :unit_abbreviation)', rows, conn)
-
-# def insert_nutrient_name(conn, *inputs):
-#     rows = generate_nutrient_name(zip(*inputs))
-#     execute_query('INSERT INTO nutrient_name (name) VALUES (:name)', rows, conn)
-
-# def insert_nutrient_unit(conn, *inputs):
-#     rows = 
-#     execute_query('INSERT INTO nutrient_unit (unit_name, nutrient_name) VALUES (:unit_name, :nutrient_name)', rows, conn)
-
-# def insert_serving_name(conn, *inputs):
-#     execute_query('INSERT INTO serving_name (name) VALUES (:name)', rows, conn)
-
-# def insert_serving_size(conn, *inputs):
-#     execute_query('INSERT INTO serving_size (size, unit_name, serving_name) VALUES (:size, :unit_name, :serving_name)', rows, conn)
-
-# def insert_serving_nutrient(conn, *inputs):
-#     execute_query('INSERT INTO serving_nutrient (nutrient_name, quantity, serving_name) VALUES (:nutrient_name, :quantity, :serving_name)', rows, conn)
-
-# def insert_meal_name(conn, *inputs):
-#     execute_query('INSERT INTO meal_name (name) VALUES (:name)', rows, conn)
-
-# def insert_meal_composition(conn, *inputs):
-#     execute_query('INSERT INTO meal_composition (meal_name, serving_name, quantity) VALUES (:meal_name, :serving_name, :quantity)', rows, conn)
-
-# def insert_meal_breakfast(conn, *inputs):
-#     execute_query('INSERT INTO meal_breakfast (meal_name) VALUES (:meal_name)', rows, conn)
-
-# def insert_meal_lunch(conn, *inputs):
-#     execute_query('INSERT INTO meal_lunch (meal_name) VALUES (:meal_name)', rows, conn)
-
-
-
-
-
-
-# def generate_unit_abbreviation(rows):
-#     return generate_dictionary([ UnitAbbreviation(0, *j) for j in rows ])
-
-# def generate_unit_name(rows):
-#     return generate_dictionary([ UnitName(0, *j, *i) for (j, i) in rows ])
-
-# def generate_nutrient_name(rows):
-#     return generate_dictionary([ NutrientName(0, *j) for j in rows ])
-
-# def generate_nutrient_unit(rows):
-#     return generate_dictionary([ NutrientUnit(*j, *i) for (j, i) in rows ])
-
-# def generate_serving_name(rows):
-#     return generate_dictionary([ ServingName(0, *j) for j in rows ])
-
-# def generate_serving_size(rows):
-#     return generate_dictionary([ ServingSize(*j, *i, *k) for (j, i, k) in rows ])
-
-# def generate_serving_nutrient(rows):
-#     return generate_dictionary([ ServingNutrient(*j, *i, *k) for (j, i, k) in rows ])
-
-# def generate_meal_name(rows):
-#     return generate_dictionary([ MealName(0, *j) for j in rows ])
-
-# def generate_meal_composition(rows):
-#     return generate_dictionary([ MealComposition(*j, *i, *k) for (j, i, k) in rows ])
-
-# def generate_meal_breakfast(rows):
-#     return generate_dictionary([ MealBreakfast(*j) for j in rows ])
-
-# def generate_meal_lunch(rows):
-#     return generate_dictionary([ MealLunch(*j) for j in rows ])
-
-
-
 
 UnitAbbreviation = namedtuple('UnitAbbreviation', ['ID', 'abbreviation'])
 UnitName = namedtuple('UnitName', ['ID', 'name', 'unit_abbreviation'])

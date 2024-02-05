@@ -1,0 +1,35 @@
+:root {
+    --bottom-layer: #2e3440;
+    --second-layer: #3b4252;
+    --text: #eceff4;
+    --button-base: #b48ead;
+    --button-border: #b48ead;
+    --button-hover-base: #a3be8c;
+    --button-hover-border: #a3be8c;
+    --button-hover-font-color: #2e3440;
+    --content-border: #b48ead;
+    --content-border-radius: .5rem;
+    /* --second-layer: #3b4252; */
+}
+
+body {
+    background-color: var(--bottom-layer);
+}
+
+li {
+    list-style-type: none;
+}
+
+p {
+    color: var(--text);
+}
+
+input {
+    background-color: var(--button-base);
+    border-color: var(--button-border);
+}
+
+input[type=submit] {
+    background-color: var(--button-base);
+    border-color: var(--button-border);
+}

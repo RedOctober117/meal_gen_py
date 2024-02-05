@@ -1,10 +1,10 @@
-from connection import *
+from src.db_model.connection import *
 # connection = sqlite3.connect("db\\test.db")
-flash_path = '..\\sql_scripts\\flash_build.sql'
-non_flash_path = '..\\sql_scripts\\no_flash_build.sqlite'
+flash_path = 'sql_scripts\\flash_build.sql'
+non_flash_path = 'sql_scripts\\no_flash_build.sqlite'
 
 def main():
-    db_path = '..\\db\\test.db'
+    db_path = 'meal_gen.db'
     database = Connection(db_path)
     database.checked_establish_connection()
     print(database.path())
@@ -16,28 +16,30 @@ def main():
  
     # print(tabularize_table('unit_abbreviation', database))
 
-    insert_into_table('unit_abbreviation', database, 'tsp')
-    insert_into_table('unit_name', database, ['Teaspoon', 'Cookie'], [6, None])
-    insert_into_table('serving_name', database, 'Golden Oreo')
-    insert_into_table('serving_size', database, 3, 7, 2)
-    insert_into_table('serving_size', database, 34, 2, 2)
-    insert_into_table('serving_nutrient', database, 1, 160, 2)
-    insert_into_table('serving_nutrient', database, 2, 7, 2)
-    insert_into_table('serving_nutrient', database, 3, 2, 2)
-    insert_into_table('serving_nutrient', database, 4, 0, 2)
-    insert_into_table('serving_nutrient', database, 5, 0, 3)
-    insert_into_table('serving_nutrient', database, 6, 120, 3)
-    insert_into_table('serving_nutrient', database, 7, 25, 2)
-    insert_into_table('serving_nutrient', database, 8, 0, 2)
-    insert_into_table('serving_nutrient', database, 9, 12, 2)
-    insert_into_table('serving_nutrient', database, 10, 12, 2)
-    insert_into_table('serving_nutrient', database, 11, 1, 2)
-    insert_into_table('serving_nutrient', database, 12, 0, 4)
-    insert_into_table('serving_nutrient', database, 13, 0, 3)
-    insert_into_table('serving_nutrient', database, 13, 0.8, 3)
-    insert_into_table('serving_nutrient', database, 13, 20, 3)
+    # insert_into_table('unit_abbreviation', database, 'tsp')
+    # insert_into_table('unit_name', database, ['Teaspoon', 'Cookie'], [6, None])
+    # insert_into_table('serving_name', database, 'Golden Oreo')
+    # insert_into_table('serving_size', database, 3, 7, 2)
+    # insert_into_table('serving_size', database, 34, 2, 2)
+    # insert_into_table('serving_nutrient', database, 1, 160, 2)
+    # insert_into_table('serving_nutrient', database, 2, 7, 2)
+    # insert_into_table('serving_nutrient', database, 3, 2, 2)
+    # insert_into_table('serving_nutrient', database, 4, 0, 2)
+    # insert_into_table('serving_nutrient', database, 5, 0, 3)
+    # insert_into_table('serving_nutrient', database, 6, 120, 3)
+    # insert_into_table('serving_nutrient', database, 7, 25, 2)
+    # insert_into_table('serving_nutrient', database, 8, 0, 2)
+    # insert_into_table('serving_nutrient', database, 9, 12, 2)
+    # insert_into_table('serving_nutrient', database, 10, 12, 2)
+    # insert_into_table('serving_nutrient', database, 11, 1, 2)
+    # insert_into_table('serving_nutrient', database, 12, 0, 4)
+    # insert_into_table('serving_nutrient', database, 13, 0, 3)
+    # insert_into_table('serving_nutrient', database, 13, 0.8, 3)
+    # insert_into_table('serving_nutrient', database, 13, 20, 3)
 
-    print(tabularize_database(database))
+    test = generate_dictionary('unit_abbreviation', tuplefy_inputs('abc', 'def'))
+    print([ i for i in test ])
+    # print(tabularize_database(database))
     
     database.connection.close()
 

@@ -1,5 +1,5 @@
 import sqlite3, os
-from input_validation import *
+from src.db_model.input_validation import *
 from model import *
 
 class ConnectionError(Exception):
