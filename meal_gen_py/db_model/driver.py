@@ -54,7 +54,7 @@ def tabularize_database(database):
 
     return buffer
 
-    def tabularize_result(rows):
+def tabularize_result(rows):
     string = ''
     
     for dict in rows:
