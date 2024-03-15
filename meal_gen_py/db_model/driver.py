@@ -1,6 +1,6 @@
 from connection import *
 from pathlib import Path
-# connection = sqlite3.connect("db\\test.db")
+
 flash_path = Path(Path.cwd(), 'src/sql_scripts/flash_build.sql')
 non_flash_path = Path(Path.cwd(), 'src/sql_scripts/no_flash_build.sqlite')
 
@@ -19,7 +19,7 @@ def main():
 
     # insert_into_table('unit_abbreviation', database, 'tsp')
     # insert_into_table('unit_name', database, ['Teaspoon', 'Cookie'], [6, None])
-    # insert_into_table('serving_name', database, 'Golden Oreo')
+    # insert_into_table('serving_name', database, 'Golden Oreo1')
     # insert_into_table('serving_size', database, 3, 7, 2)
     # insert_into_table('serving_size', database, 34, 2, 2)
     # insert_into_table('serving_nutrient', database, 1, 160, 2)
@@ -41,6 +41,8 @@ def main():
     test = generate_dictionary('unit_abbreviation', tuplefy_inputs('abc', 'def'))
     print([ i for i in test ])
     # print(tabularize_database(database))
+
+    print(select_from_table('serving_name_id', database, 2))
     
     database.connection.close()
 

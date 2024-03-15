@@ -1,6 +1,7 @@
 from collections import namedtuple
 from meal_gen_py.db_model.input_validation import *
 import sqlite3
+from meal_gen_py.db_model.connection import Connection
 
 ## Data flow model
 ## Input: collection of inputs from user. One collection per field, ie. unit_abbreviation would be ('input1', 'input2'), unit_name would be (('name1', ''name2'), ('abbrev_id1', 'abbrev_id2'))
@@ -53,6 +54,18 @@ def execute_query(query, rows, conn):
     except sqlite3.OperationalError:
         print(f'ERROR: One or more syntax errors exist at \'{query}\'')
 
+def selection_query(query, rows, conn):
+    try:
+        conn = conn.connection
+        with conn:
+            print(query, rows)
+            # if confirm_commit(rows):
+            return conn.execute(query, rows).fetchone()
+    except sqlite3.IntegrityError:
+        print('ERROR: A matching entry already exists!')
+    except sqlite3.OperationalError:
+        print(f'ERROR: One or more syntax errors exist at \'{query}\'')
+
 ## LOGIC FLOW:
 ## User input is taken for each field of the relevant table. The input is passed into `insert_table()`, where each param is 
 ## is each possible field. Said parameters are tupled and passed to a dictionary generator
@@ -74,15 +87,37 @@ table_insertion_query_templates = {
                             'meal_time': 'INSERT INTO meal_time (meal_name, time_classification) VALUES (:meal_name, :time_classification)'
                             }
 
+# Selection templates use the qmark style because selection queries are NOT DML queries.
+table_insertion_selection_templates = {
+                            # 'unit_abbreviation': 'INSERT INTO unit_abbreviation (abbreviation) VALUES (:abbreviation)',
+                            # 'unit_name': 'INSERT INTO unit_name (name, unit_abbreviation) VALUES (:name, :unit_abbreviation)',
+                            # 'nutrient_name': 'INSERT INTO nutrient_name (name) VALUES (:name)',
+                            # 'nutrient_unit': 'INSERT INTO nutrient_unit (unit_name, nutrient_name) VALUES (:unit_name, :nutrient_name)',
+                            'serving_name_id': 'SELECT * FROM serving_name WHERE id = ?',
+                            'serving_name_name': 'SELECT * FROM serving_name WHERE name = ?',
+                            # 'serving_size': 'INSERT INTO serving_size (size, unit_name, serving_name) VALUES (:size, :unit_name, :serving_name)',
+                            # 'serving_nutrient': 'INSERT INTO serving_nutrient (nutrient_name, quantity, serving_name) VALUES (:nutrient_name, :quantity, :serving_name)',
+                            # 'meal_name': 'INSERT INTO meal_name (name) VALUES (:name)',
+                            # 'meal_composition': 'INSERT INTO meal_composition (meal_name, serving_name, quantity) VALUES (:meal_name, :serving_name, :quantity)',
+                            # 'time_classification': 'INSERT INTO time_classification (classification) VALUES (:classification)',
+                            # 'meal_time': 'INSERT INTO meal_time (meal_name, time_classification) VALUES (:meal_name, :time_classification)'
+                            }
+
 def tuplefy_inputs(*inputs):
     tuplify_inputs = lambda i: i if isinstance(i, list) else [i]
     return list(map(tuplify_inputs, inputs))
 
-def insert_into_table(table, conn, *inputs):
+def insert_into_table(table, conn: Connection, *inputs):
     inputs = tuplefy_inputs(*inputs)
     rows = generate_dictionary(table, zip(*inputs))
     execute_query(table_insertion_query_templates.get(table), rows, conn)
     return rows
+
+def select_from_table(table: str, conn: Connection, *inputs):
+    # inputs = tuplefy_inputs(*inputs)
+    # rows = generate_dictionary(table, zip(*inputs))
+    # return rows
+    return selection_query(table_insertion_selection_templates.get(table), inputs, conn)
 
 # Tuples with `0` are placeholder IDs, as IDs are handled by the database and NEVER INSERTED MANUALLY
 def generate_dictionary(table, rows):

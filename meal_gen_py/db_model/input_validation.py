@@ -38,7 +38,7 @@ def query_user(message: str):
 #                 return user_input
 #             else:
 #                 print('Invalid token.\n')
-def match_query_user(message: str, valid_inputs: [], case_sensitive: bool):
+def match_query_user(message: str, valid_inputs: [], case_sensitive: bool) -> str:
 
     if case_sensitive:
         validation_list = valid_inputs
